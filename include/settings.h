@@ -24,6 +24,11 @@ public:
     String getSXMPassword();
     void setSXMCredentials(const String& email, const String& password);
     
+    // SiriusXM Server (for m3u8XM server mode)
+    String getSXMServer();
+    void setSXMServer(const String& server);
+    bool hasSXMServer();
+    
     // FM Frequency
     float getFMFrequency();
     void setFMFrequency(float frequency);

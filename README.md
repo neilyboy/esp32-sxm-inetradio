@@ -32,6 +32,44 @@ A standalone ESP32-based internet radio that streams SiriusXM and internet radio
 - ✅ Auto-connect on power-up
 - ✅ Resume last played channel
 
+## SiriusXM Configuration
+
+**IMPORTANT:** The ESP32 cannot run Python, so it cannot run the m3u8XM script directly. You have two options:
+
+### Option 1: Internet Radio Only (Works Immediately)
+- Skip SiriusXM setup entirely
+- Use the 32 pre-loaded internet radio stations
+- No additional configuration needed
+- **Best for testing the hardware first!**
+
+### Option 2: SiriusXM via m3u8XM Server (Recommended for Full SXM)
+- Run the [m3u8XM Python script](https://github.com/myselfondiscord/m3u8XM) on a **separate device**:
+  - Raspberry Pi (recommended)
+  - Home server
+  - Always-on PC/Mac
+- ESP32 connects to this server to get SiriusXM stream URLs
+- **Full setup guide:** See `M3U8XM_SERVER_SETUP.md`
+
+**Quick Server Setup:**
+1. Install m3u8XM on Raspberry Pi
+2. Run the API wrapper server (provided in guide)
+3. Configure ESP32 with server IP in `include/config.h`:
+   ```cpp
+   #define USE_SXM_SERVER true
+   #define DEFAULT_SXM_SERVER "192.168.1.100:5000"  // Your server IP
+   ```
+4. Rebuild and flash ESP32
+
+**Or configure via settings menu on device** (feature can be added - see TODO in M3U8XM_SERVER_SETUP.md)
+
+### Option 3: Direct SiriusXM API (Advanced - Not Fully Implemented)
+- Implement native SiriusXM API calls in C++
+- See `SIRIUSXM_API.md` for implementation guide
+- Requires reverse engineering SiriusXM's authentication
+- **Status:** Placeholder code only
+
+**For most users:** Start with Option 1 (internet radio) to test hardware, then add Option 2 (server mode) for SiriusXM.
+
 ## Wiring Diagram
 
 ### ESP32 to ILI9341 Display

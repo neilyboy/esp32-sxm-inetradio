@@ -101,6 +101,12 @@ void setup() {
             
             // Login to SXM
             uiManager->drawLoading("Login to SXM...");
+            
+            // Set SXM server if configured
+            if (settings.hasSXMServer()) {
+                sxmClient.setSXMServer(settings.getSXMServer());
+            }
+            
             String email = settings.getSXMEmail();
             String sxmPass = settings.getSXMPassword();
             
@@ -286,6 +292,11 @@ void handleSXMSetup() {
         // Check login button
         if (x >= SCREEN_WIDTH / 2 - 40 && x <= SCREEN_WIDTH / 2 + 40 && y >= 135 && y <= 165) {
             uiManager->drawLoading("Logging in...");
+            
+            // Set SXM server if configured
+            if (settings.hasSXMServer()) {
+                sxmClient.setSXMServer(settings.getSXMServer());
+            }
             
             if (sxmClient.login(email, password)) {
                 settings.setSXMCredentials(email, password);

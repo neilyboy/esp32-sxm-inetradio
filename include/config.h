@@ -36,12 +36,19 @@
 #define WIFI_TIMEOUT_MS 20000
 #define HTTP_TIMEOUT_MS 10000
 
+// SiriusXM Mode
+// Set to true to use local m3u8XM server (Raspberry Pi/home server)
+// Set to false to call SiriusXM API directly from ESP32 (not fully implemented)
+#define USE_SXM_SERVER false
+#define DEFAULT_SXM_SERVER "192.168.1.100:5000"  // Change to your server IP
+
 // Storage Keys
 #define PREF_NAMESPACE "sxm_radio"
 #define KEY_WIFI_SSID "wifi_ssid"
 #define KEY_WIFI_PASS "wifi_pass"
 #define KEY_SXM_EMAIL "sxm_email"
 #define KEY_SXM_PASS "sxm_pass"
+#define KEY_SXM_SERVER "sxm_server"
 #define KEY_FM_FREQ "fm_freq"
 #define KEY_LAST_CHANNEL "last_ch"
 
@@ -62,8 +69,13 @@
 #define COLOR_PRIMARY     0x0438  // SXM blue
 #define COLOR_SECONDARY   0x8410  // Gray
 
-// API Endpoints
+// API Endpoints (for direct SXM API mode)
 #define SXM_LOGIN_URL "https://player.siriusxm.com/rest-api/2/experience/modules/get/login"
 #define SXM_CHANNEL_URL "https://player.siriusxm.com/rest-api/2/experience/modules/get/channel-player"
+
+// Local Server Endpoints (for m3u8XM server mode)
+#define SXM_SERVER_LOGIN "/api/login"
+#define SXM_SERVER_CHANNELS "/api/channels"
+#define SXM_SERVER_STREAM "/api/stream"
 
 #endif // CONFIG_H

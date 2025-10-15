@@ -51,6 +51,19 @@ void Settings::setSXMCredentials(const String& email, const String& password) {
     preferences.putString(KEY_SXM_PASS, password);
 }
 
+// SiriusXM Server Settings
+String Settings::getSXMServer() {
+    return preferences.getString(KEY_SXM_SERVER, DEFAULT_SXM_SERVER);
+}
+
+void Settings::setSXMServer(const String& server) {
+    preferences.putString(KEY_SXM_SERVER, server);
+}
+
+bool Settings::hasSXMServer() {
+    return preferences.isKey(KEY_SXM_SERVER);
+}
+
 // FM Frequency
 float Settings::getFMFrequency() {
     return preferences.getFloat(KEY_FM_FREQ, FM_DEFAULT_FREQ);

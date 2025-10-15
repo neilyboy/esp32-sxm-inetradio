@@ -1,24 +1,36 @@
 #include "sxm_client.h"
 #include "config.h"
 
-SXMClient::SXMClient() {}
+SXMClient::SXMClient() : sxmServer(DEFAULT_SXM_SERVER) {}
 
 SXMClient::~SXMClient() {
     logout();
 }
 
+void SXMClient::setSXMServer(const String& serverUrl) {
+    sxmServer = serverUrl;
+    Serial.printf("SXM: Server set to %s\n", sxmServer.c_str());
+}
+
+String SXMClient::getSXMServer() {
+    return sxmServer;
+}
+
 bool SXMClient::login(const String& email, const String& password) {
     Serial.println("SXM: Attempting login...");
     
-    // Note: This is a simplified implementation
-    // The actual SiriusXM API requires proper OAuth/token handling
-    // For now, we'll store credentials for future use
+#if USE_SXM_SERVER
+    // Use m3u8XM server mode
+    Serial.println("SXM: Using server mode");
+    return loginToServer(email, password);
+#else
+    // Direct API mode (not fully implemented)
+    Serial.println("SXM: Using direct API mode (placeholder)");
     
     HTTPClient http;
     http.begin(SXM_LOGIN_URL);
     http.addHeader("Content-Type", "application/json");
     
-    // Build JSON payload
     StaticJsonDocument<512> doc;
     doc["email"] = email;
     doc["password"] = password;
@@ -30,13 +42,10 @@ bool SXMClient::login(const String& email, const String& password) {
     
     if (httpCode == HTTP_CODE_OK) {
         String response = http.getString();
-        
-        // Parse response
         DynamicJsonDocument responseDoc(2048);
         DeserializationError error = deserializeJson(responseDoc, response);
         
         if (!error) {
-            // Extract token (adjust based on actual API response)
             if (responseDoc.containsKey("token")) {
                 authToken = responseDoc["token"].as<String>();
                 Serial.println("SXM: Login successful");
@@ -50,6 +59,7 @@ bool SXMClient::login(const String& email, const String& password) {
     Serial.println(lastError);
     http.end();
     return false;
+#endif
 }
 
 bool SXMClient::isAuthenticated() {
@@ -70,8 +80,10 @@ bool SXMClient::fetchChannelList() {
     
     Serial.println("SXM: Fetching channel list...");
     
-    // This is a placeholder - actual implementation would fetch from SXM API
-    // For now, we'll populate with common SXM channels
+#if USE_SXM_SERVER
+    return fetchChannelListFromServer();
+#else
+    // Placeholder implementation with mock channels
     channels.clear();
     
     // Example channels (these would come from API)
@@ -100,6 +112,7 @@ bool SXMClient::fetchChannelList() {
     
     Serial.printf("SXM: Loaded %d channels\n", channels.size());
     return true;
+#endif
 }
 
 std::vector<SXMChannel> SXMClient::getChannels() {
@@ -125,11 +138,17 @@ SXMChannel* SXMClient::getChannelByNumber(const String& number) {
 }
 
 String SXMClient::getStreamUrl(const String& channelId) {
+#if USE_SXM_SERVER
+    // Get stream URL from server
+    return getStreamUrlFromServer(channelId);
+#else
+    // Use cached stream URL from channel
     SXMChannel* ch = getChannelById(channelId);
     if (ch) {
         return ch->streamUrl;
     }
     return "";
+#endif
 }
 
 String SXMClient::getLastError() {
@@ -177,4 +196,125 @@ bool SXMClient::parseChannelList(const String& jsonResponse) {
     // This depends on actual API response format
     
     return true;
+}
+
+// Server mode implementations
+bool SXMClient::loginToServer(const String& email, const String& password) {
+    HTTPClient http;
+    String url = "http://" + sxmServer + SXM_SERVER_LOGIN;
+    
+    Serial.printf("SXM: Connecting to server at %s\n", url.c_str());
+    
+    http.begin(url);
+    http.addHeader("Content-Type", "application/json");
+    
+    StaticJsonDocument<256> doc;
+    doc["username"] = email;
+    doc["password"] = password;
+    
+    String payload;
+    serializeJson(doc, payload);
+    
+    int httpCode = http.POST(payload);
+    
+    if (httpCode == HTTP_CODE_OK) {
+        String response = http.getString();
+        
+        DynamicJsonDocument responseDoc(1024);
+        DeserializationError error = deserializeJson(responseDoc, response);
+        
+        if (!error && responseDoc.containsKey("success")) {
+            if (responseDoc["success"].as<bool>()) {
+                authToken = "server_authenticated";  // Token from server if provided
+                Serial.println("SXM: Server login successful");
+                http.end();
+                return true;
+            }
+        }
+    }
+    
+    lastError = "Server login failed: HTTP " + String(httpCode);
+    Serial.println(lastError);
+    http.end();
+    return false;
+}
+
+bool SXMClient::fetchChannelListFromServer() {
+    HTTPClient http;
+    String url = "http://" + sxmServer + SXM_SERVER_CHANNELS;
+    
+    Serial.printf("SXM: Fetching channels from %s\n", url.c_str());
+    
+    http.begin(url);
+    http.addHeader("Authorization", "Bearer " + authToken);
+    
+    int httpCode = http.GET();
+    
+    if (httpCode == HTTP_CODE_OK) {
+        String response = http.getString();
+        
+        DynamicJsonDocument doc(16384);
+        DeserializationError error = deserializeJson(doc, response);
+        
+        if (!error) {
+            channels.clear();
+            
+            JsonArray channelArray = doc["channels"].as<JsonArray>();
+            
+            for (JsonObject channelObj : channelArray) {
+                SXMChannel channel;
+                channel.id = channelObj["id"].as<String>();
+                channel.name = channelObj["name"].as<String>();
+                channel.number = channelObj["number"] | channelObj["channelNumber"].as<String>();
+                channel.genre = channelObj["genre"].as<String>();
+                channel.logoUrl = channelObj["logoUrl"] | channelObj["logo"].as<String>();
+                // Stream URL will be fetched on demand
+                
+                channels.push_back(channel);
+            }
+            
+            Serial.printf("SXM: Loaded %d channels from server\n", channels.size());
+            http.end();
+            return true;
+        }
+        
+        lastError = "Failed to parse channel list from server";
+        Serial.println(lastError);
+    } else {
+        lastError = "Failed to fetch channels: HTTP " + String(httpCode);
+        Serial.println(lastError);
+    }
+    
+    http.end();
+    return false;
+}
+
+String SXMClient::getStreamUrlFromServer(const String& channelId) {
+    HTTPClient http;
+    String url = "http://" + sxmServer + SXM_SERVER_STREAM + "/" + channelId;
+    
+    Serial.printf("SXM: Getting stream URL from %s\n", url.c_str());
+    
+    http.begin(url);
+    http.addHeader("Authorization", "Bearer " + authToken);
+    
+    int httpCode = http.GET();
+    
+    if (httpCode == HTTP_CODE_OK) {
+        String response = http.getString();
+        
+        StaticJsonDocument<512> doc;
+        DeserializationError error = deserializeJson(doc, response);
+        
+        if (!error && doc.containsKey("streamUrl")) {
+            String streamUrl = doc["streamUrl"].as<String>();
+            http.end();
+            return streamUrl;
+        }
+    }
+    
+    lastError = "Failed to get stream URL: HTTP " + String(httpCode);
+    Serial.println(lastError);
+    http.end();
+    return "";
 }
