@@ -1,0 +1,237 @@
+# ESP32 SiriusXM IntraRadio
+
+A standalone ESP32-based internet radio that streams SiriusXM and internet radio stations, broadcasting over FM to your car stereo.
+
+## Hardware Requirements
+
+### Core Components
+- **ESP32 Development Board** (ESP32-WROOM-32 or similar)
+  - Must have WiFi capability
+  - Recommend 4MB+ flash
+- **2.8" ILI9341 TFT Touchscreen Display** (320x240, SPI)
+  - [ELEGOO 2.8" TFT Display](https://www.amazon.com/ELEGOO-Display-Acrylic-Protector-Projects/dp/B0FJQJZYXG)
+- **FM Transmitter Module** (choose one):
+  - **QN8066** (recommended - better quality, stereo, I2C)
+  - **KT0803L** (budget option, I2C)
+- **I2S DAC Module** (PCM5102 or similar) - for audio output
+- **USB-C Power Module** (5V to 3.3V/5V for ESP32)
+
+### Optional Components
+- Small amplifier board (PAM8403) if needed for audio boost
+- Enclosure/case for clean installation
+
+## Features
+
+- ✅ WiFi configuration via touchscreen
+- ✅ SiriusXM channel streaming (requires SiriusXM subscription)
+- ✅ Internet radio station support
+- ✅ FM transmission on user-selectable frequency (87.5-108 MHz)
+- ✅ Touch-based channel selection
+- ✅ Settings management (WiFi, credentials, FM frequency)
+- ✅ Persistent storage of settings
+- ✅ Auto-connect on power-up
+- ✅ Resume last played channel
+
+## Wiring Diagram
+
+### ESP32 to ILI9341 Display
+```
+ESP32          ILI9341
+-----          -------
+GPIO 23   -->  MOSI
+GPIO 18   -->  SCK
+GPIO 15   -->  CS
+GPIO 2    -->  DC
+GPIO 4    -->  RST
+GPIO 19   -->  MISO
+GPIO 21   -->  T_CS (Touch CS)
+3.3V      -->  VCC
+GND       -->  GND
+3.3V      -->  LED (backlight)
+```
+
+### ESP32 to QN8066 FM Transmitter
+```
+ESP32          QN8066
+-----          ------
+GPIO 22   -->  SCL (I2C Clock)
+GPIO 21   -->  SDA (I2C Data)
+3.3V      -->  VCC
+GND       -->  GND
+```
+
+### ESP32 to PCM5102 I2S DAC
+```
+ESP32          PCM5102
+-----          -------
+GPIO 25   -->  BCK (Bit Clock)
+GPIO 26   -->  LCK (Word Select)
+GPIO 27   -->  DIN (Data)
+GND       -->  GND
+5V        -->  VIN
+           
+PCM5102 --> QN8066
+OUTL    --> LINL (Left Input)
+OUTR    --> LINR (Right Input)
+GND     --> GND
+```
+
+### Power
+```
+USB-C Power (5V) --> Buck Converter --> 3.3V for ESP32
+                                    --> 5V for peripherals
+```
+
+## Software Setup
+
+### Prerequisites
+- **PlatformIO** (recommended) or Arduino IDE
+- USB cable for ESP32 programming
+
+### Installation
+
+1. **Clone this repository:**
+   ```bash
+   git clone <your-repo>
+   cd esp32-sxm-intradio
+   ```
+
+2. **Install PlatformIO:**
+   ```bash
+   pip install platformio
+   ```
+
+3. **Build the project:**
+   ```bash
+   pio run
+   ```
+
+4. **Upload to ESP32:**
+   ```bash
+   pio run --target upload
+   ```
+
+5. **Monitor serial output (optional):**
+   ```bash
+   pio device monitor
+   ```
+
+## First-Time Setup
+
+1. **Power on the device** - Connect USB-C power
+2. **WiFi Configuration:**
+   - Device will scan for WiFi networks
+   - Touch to select your network (phone's hotspot)
+   - Enter password using on-screen keyboard
+   - Device will connect and save credentials
+
+3. **SiriusXM Credentials:**
+   - Enter your SiriusXM email
+   - Enter your SiriusXM password
+   - Credentials are stored securely
+
+4. **FM Frequency Selection:**
+   - Choose an empty FM frequency (87.5-108 MHz)
+   - Avoid frequencies used by local stations
+   - Recommended: 87.9, 88.1, or 88.3 FM
+
+5. **Ready to Use:**
+   - Main screen shows SiriusXM logo
+   - Touch logo to browse channels
+   - Use arrow buttons or direct input to change channels
+
+## Usage
+
+### Main Screen
+- **SiriusXM Logo** - Touch to open channel list
+- **Settings Icon** - Configure WiFi, credentials, FM frequency
+- **Internet Radio Icon** - Browse internet radio stations
+
+### Channel Selection
+- **Browse Mode** - Scroll through channel list
+- **Direct Input** - Type channel number
+- **Arrow Buttons** - Navigate up/down
+- **Back Button** - Return to main screen
+
+### Settings Menu
+- **WiFi Settings** - Change network/password
+- **SiriusXM Credentials** - Update login info
+- **FM Frequency** - Adjust transmission frequency
+- **About** - Version and info
+
+## Configuration
+
+All settings are stored in ESP32 NVS (Non-Volatile Storage) and persist across reboots.
+
+## Troubleshooting
+
+### No Audio
+- Check FM transmitter wiring
+- Verify FM frequency is clear
+- Ensure DAC is properly connected
+- Check audio output level
+
+### WiFi Won't Connect
+- Verify password is correct
+- Check signal strength
+- Ensure phone hotspot is active
+- Try forgetting and re-entering credentials
+
+### Display Not Working
+- Check SPI wiring
+- Verify power connections
+- Test with example sketch first
+
+### SiriusXM Not Streaming
+- Verify credentials are correct
+- Check internet connectivity
+- Ensure SiriusXM subscription is active
+
+## Development
+
+### Project Structure
+```
+esp32-sxm-intradio/
+├── src/
+│   ├── main.cpp           # Main application entry
+│   ├── ui/                # UI components
+│   │   ├── screen_manager.cpp
+│   │   ├── main_screen.cpp
+│   │   ├── channel_screen.cpp
+│   │   ├── settings_screen.cpp
+│   │   └── keyboard.cpp
+│   ├── network/           # Network & streaming
+│   │   ├── wifi_manager.cpp
+│   │   ├── sxm_client.cpp
+│   │   └── radio_client.cpp
+│   ├── audio/             # Audio handling
+│   │   ├── audio_player.cpp
+│   │   └── audio_decoder.cpp
+│   ├── hardware/          # Hardware drivers
+│   │   ├── fm_transmitter.cpp
+│   │   ├── display.cpp
+│   │   └── touch.cpp
+│   └── storage/           # Settings storage
+│       └── settings.cpp
+├── include/               # Header files
+├── lib/                   # External libraries
+├── platformio.ini         # PlatformIO config
+└── README.md
+```
+
+### Adding Internet Radio Stations
+Edit `src/data/radio_stations.h` to add more stations.
+
+## License
+
+MIT License - See LICENSE file for details
+
+## Credits
+
+- SiriusXM API integration based on [m3u8XM](https://github.com/myselfondiscord/m3u8XM)
+- Built for the maker community
+
+## Disclaimer
+
+This project is for educational purposes. Ensure you have an active SiriusXM subscription. 
+FM transmission power must comply with local regulations (typically < 100mW without license).
