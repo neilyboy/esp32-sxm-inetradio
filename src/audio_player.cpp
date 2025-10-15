@@ -1,7 +1,13 @@
 #include "audio_player.h"
+#include "fm_transmitter.h"
 #include "config.h"
 
-AudioPlayer::AudioPlayer() : playing(false), currentVolume(12) {}
+// Global pointer for audio callbacks
+AudioPlayer* g_audioPlayer = nullptr;
+
+AudioPlayer::AudioPlayer() : playing(false), currentVolume(12), fmTransmitter(nullptr) {
+    g_audioPlayer = this;
+}
 
 AudioPlayer::~AudioPlayer() {
     stop();
@@ -14,6 +20,11 @@ bool AudioPlayer::begin() {
     
     Serial.println("Audio player initialized");
     return true;
+}
+
+void AudioPlayer::setFMTransmitter(FMTransmitter* fm) {
+    fmTransmitter = fm;
+    Serial.println("FM transmitter linked to audio player for RDS");
 }
 
 bool AudioPlayer::play(const String& url) {
@@ -84,6 +95,27 @@ void AudioPlayer::loop() {
     audio.loop();
 }
 
+void AudioPlayer::updateMetadata(const String& title, const String& artist) {
+    currentTitle = title;
+    currentArtist = artist;
+    
+    // Send to FM transmitter RDS if available
+    if (fmTransmitter) {
+        fmTransmitter->setSongInfo(artist, title);
+        Serial.printf("RDS Updated: %s - %s\n", artist.c_str(), title.c_str());
+    }
+}
+
+void AudioPlayer::updateStationName(const String& station) {
+    currentStation = station;
+    
+    // Send to FM transmitter RDS if available
+    if (fmTransmitter) {
+        fmTransmitter->setStationName(station);
+        Serial.printf("RDS Station: %s\n", station.c_str());
+    }
+}
+
 // Optional: Audio event callbacks
 void audio_info(const char *info){
     Serial.print("audio_info: "); Serial.println(info);
@@ -99,10 +131,30 @@ void audio_eof_mp3(const char *info){
 
 void audio_showstation(const char *info){
     Serial.print("station: "); Serial.println(info);
+    
+    // Update RDS station name
+    if (g_audioPlayer) {
+        g_audioPlayer->updateStationName(String(info));
+    }
 }
 
 void audio_showstreamtitle(const char *info){
     Serial.print("streamtitle: "); Serial.println(info);
+    
+    // Parse stream title (usually "Artist - Title" format)
+    if (g_audioPlayer) {
+        String title = String(info);
+        int separatorPos = title.indexOf(" - ");
+        
+        if (separatorPos > 0) {
+            String artist = title.substring(0, separatorPos);
+            String song = title.substring(separatorPos + 3);
+            g_audioPlayer->updateMetadata(song, artist);
+        } else {
+            // No separator, treat whole thing as title
+            g_audioPlayer->updateMetadata(title, "");
+        }
+    }
 }
 
 void audio_bitrate(const char *info){

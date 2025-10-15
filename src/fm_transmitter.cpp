@@ -4,60 +4,30 @@
 FMTransmitter::FMTransmitter() : currentFrequency(FM_DEFAULT_FREQ), initialized(false) {}
 
 bool FMTransmitter::begin() {
+    // Initialize I2C
     Wire.begin(I2C_SDA, I2C_SCL);
     
-    // Reset QN8066
-    uint8_t initData[] = {
-        0x00, 0x81,  // System1: SWRST
-    };
-    
-    if (!writeRegisters(0x00, initData, 2)) {
-        Serial.println("FM: Failed to reset");
-        return false;
-    }
+    // Setup QN8066 using pu2clr library
+    tx.setup();
     
     delay(100);
     
-    // Initialize QN8066 registers
-    uint8_t configData[] = {
-        0x00, 0x01,  // System1: Enable
-        0x01, 0x34,  // System2: 
-        0x02, 0x10,  // System3:
-        0x03, 0x00,  // System4
-        0x04, 0x00,  // System5
-        0x05, 0x58,  // CCA
-        0x06, 0x00,  // SNR
-        0x07, 0x00,  // RSSISIG
-        0x08, 0x00,  // CID1
-        0x09, 0x00,  // CID2
-        0x0A, 0x00,  // STATUS1
-        0x0B, 0x00,  // STATUS2
-        0x0C, 0x00,  // STATUS3
-        0x0D, 0x00,  // STATUS4
-        0x0E, 0x00,  // RDS_DATA
-        0x0F, 0x00   // RDS_DATA
-    };
+    // Configure for TX mode
+    tx.setTX(currentFrequency);
     
-    // Set TX mode
-    uint8_t txMode = 0x10; // TX mode enable
-    if (!writeRegister(0x00, txMode)) {
-        Serial.println("FM: Failed to set TX mode");
-        return false;
-    }
+    // Set transmit power (range 70-120, higher = more power but check FCC limits!)
+    tx.setTxInputImpedance(1);  // 20K impedance
+    tx.setTxPilot(1);  // Enable stereo pilot
+    tx.setTxInputBufferGain(1);  // Input buffer gain
+    tx.setTxPower(85);  // Medium power for legal compliance
     
-    delay(10);
-    
-    // Set frequency
-    if (!setFrequency(currentFrequency)) {
-        Serial.println("FM: Failed to set frequency");
-        return false;
-    }
-    
-    // Set transmit power (adjust as needed, max 127)
-    setPower(80);  // Medium power
+    // Enable RDS
+    tx.rdsSetMode(1);  // Enable RDS
+    tx.rdsSetStationName("SXM ESP32");  // Default station name
+    tx.rdsSetRadioText("Internet Radio");  // Default text
     
     initialized = true;
-    Serial.printf("FM Transmitter initialized at %.1f MHz\n", currentFrequency);
+    Serial.printf("FM Transmitter initialized at %.1f MHz with RDS support\n", currentFrequency);
     
     return true;
 }
@@ -68,20 +38,7 @@ bool FMTransmitter::setFrequency(float frequency) {
         return false;
     }
     
-    uint16_t freqReg = frequencyToRegister(frequency);
-    
-    // Write frequency to registers (QN8066 specific)
-    uint8_t freqHigh = (freqReg >> 8) & 0xFF;
-    uint8_t freqLow = freqReg & 0xFF;
-    
-    if (!writeRegister(0x01, freqLow)) {
-        return false;
-    }
-    
-    if (!writeRegister(0x02, freqHigh)) {
-        return false;
-    }
-    
+    tx.setTX(frequency);
     currentFrequency = frequency;
     Serial.printf("FM: Frequency set to %.1f MHz\n", frequency);
     
@@ -93,65 +50,61 @@ float FMTransmitter::getFrequency() {
 }
 
 bool FMTransmitter::setPower(uint8_t power) {
-    if (power > 127) {
-        power = 127;
-    }
+    // Constrain power to valid range (70-120)
+    if (power < 70) power = 70;
+    if (power > 120) power = 120;
     
-    // Write power to register (QN8066 specific - register 0x04)
-    return writeRegister(0x04, power);
+    tx.setTxPower(power);
+    Serial.printf("FM: Power set to %d\n", power);
+    
+    return true;
 }
 
 bool FMTransmitter::setMute(bool mute) {
-    uint8_t value = mute ? 0x00 : 0x01;
-    return writeRegister(0x00, value);
+    tx.setTxMute(mute ? 1 : 0);
+    return true;
 }
 
 bool FMTransmitter::isTransmitting() {
     return initialized;
 }
 
-bool FMTransmitter::writeRegister(uint8_t reg, uint8_t value) {
-    Wire.beginTransmission(QN8066_ADDR);
-    Wire.write(reg);
-    Wire.write(value);
-    uint8_t error = Wire.endTransmission();
+// RDS (Radio Data System) Methods
+
+void FMTransmitter::setStationName(const String& name) {
+    // Station name max 8 characters
+    String truncated = name.substring(0, 8);
+    currentStationName = truncated;
     
-    return (error == 0);
+    // Convert String to char array for library
+    char stationName[9];
+    truncated.toCharArray(stationName, 9);
+    tx.rdsSetStationName(stationName);
+    
+    Serial.printf("FM RDS: Station name set to '%s'\n", stationName);
 }
 
-bool FMTransmitter::readRegister(uint8_t reg, uint8_t& value) {
-    Wire.beginTransmission(QN8066_ADDR);
-    Wire.write(reg);
-    uint8_t error = Wire.endTransmission(false);
-    
-    if (error != 0) {
-        return false;
-    }
-    
-    Wire.requestFrom(QN8066_ADDR, (uint8_t)1);
-    if (Wire.available()) {
-        value = Wire.read();
-        return true;
-    }
-    
-    return false;
+void FMTransmitter::setSongInfo(const String& artist, const String& title) {
+    // Combine artist and title for radio text
+    String combined = artist + " - " + title;
+    setRadioText(combined);
 }
 
-bool FMTransmitter::writeRegisters(uint8_t startReg, uint8_t* data, uint8_t len) {
-    Wire.beginTransmission(QN8066_ADDR);
-    Wire.write(startReg);
+void FMTransmitter::setRadioText(const String& text) {
+    // Radio text max 64 characters
+    String truncated = text.substring(0, 64);
+    currentRadioText = truncated;
     
-    for (uint8_t i = 0; i < len; i++) {
-        Wire.write(data[i]);
-    }
+    // Convert String to char array for library
+    char radioText[65];
+    truncated.toCharArray(radioText, 65);
+    tx.rdsSetRadioText(radioText);
     
-    uint8_t error = Wire.endTransmission();
-    return (error == 0);
+    Serial.printf("FM RDS: Radio text set to '%s'\n", radioText);
 }
 
-uint16_t FMTransmitter::frequencyToRegister(float frequency) {
-    // QN8066 frequency calculation
-    // Formula: Channel = (Freq_MHz - 60) / 0.05
-    uint16_t channel = (uint16_t)((frequency - 60.0) / 0.05);
-    return channel;
+void FMTransmitter::updateRDS() {
+    // Send RDS data
+    // Call this periodically (e.g., in main loop) to keep RDS active
+    tx.rdsSendGroup();
 }

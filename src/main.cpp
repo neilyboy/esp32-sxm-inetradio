@@ -86,6 +86,9 @@ void setup() {
         return;
     }
     
+    // Link audio player to FM transmitter for RDS metadata
+    audioPlayer.setFMTransmitter(&fmTransmitter);
+    
     // Check if first run
     if (settings.isFirstRun()) {
         Serial.println("First run - entering setup mode");
@@ -135,6 +138,13 @@ void setup() {
 void loop() {
     // Update audio player
     audioPlayer.loop();
+    
+    // Update RDS data transmission (call periodically to keep RDS active)
+    static unsigned long lastRDSUpdate = 0;
+    if (millis() - lastRDSUpdate > 100) {  // Update every 100ms
+        fmTransmitter.updateRDS();
+        lastRDSUpdate = millis();
+    }
     
     // Handle touch input
     uint16_t touchX, touchY;
