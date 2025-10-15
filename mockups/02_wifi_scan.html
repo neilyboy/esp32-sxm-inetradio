@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WiFi Scan - ESP32 SiriusXM IntraRadio</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #f0f0f0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        
+        .device {
+            width: 320px;
+            height: 240px;
+            background: rgb(24, 56, 99);
+            position: relative;
+            border: 3px solid #333;
+            border-radius: 5px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: rgb(8, 28, 56); /* COLOR_PRIMARY */
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .content {
+            padding: 10px;
+        }
+        
+        .network-item {
+            background: rgb(66, 68, 136); /* COLOR_DARKGRAY */
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+            color: white;
+            font-size: 18px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .network-item.selected {
+            background: rgb(8, 28, 56); /* COLOR_PRIMARY - selected */
+        }
+        
+        .scrollbar {
+            position: absolute;
+            right: 8px;
+            top: 40px;
+            width: 4px;
+            height: 175px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 2px;
+        }
+        
+        .scrollbar-thumb {
+            width: 100%;
+            height: 35px;
+            background: rgba(255,255,255,0.6);
+            border-radius: 2px;
+            position: relative;
+            top: 0;
+        }
+        
+        .info {
+            margin-top: 20px;
+            text-align: center;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="device">
+        <div class="header">WiFi Networks</div>
+        <div class="content">
+            <div class="network-item selected">MyHomeNetwork</div>
+            <div class="network-item">ATT-WiFi-5G</div>
+            <div class="network-item">Verizon_Hotspot</div>
+            <div class="network-item">Linksys-Guest</div>
+            <div class="network-item">T-Mobile-8374</div>
+        </div>
+        <div class="scrollbar">
+            <div class="scrollbar-thumb"></div>
+        </div>
+    </div>
+    
+    <div class="info">
+        <h3>WiFi Network Selection</h3>
+        <p>Scan and select your WiFi network on first run</p>
+        <p><small>Touch a network to select, then enter password</small></p>
+    </div>
+</body>
+</html>

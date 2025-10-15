@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Screen - ESP32 SiriusXM IntraRadio</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #f0f0f0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        
+        .device {
+            width: 320px;
+            height: 240px;
+            background: rgb(24, 56, 99);
+            position: relative;
+            border: 3px solid #333;
+            border-radius: 5px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .content {
+            padding: 10px;
+        }
+        
+        .top-section {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .logo-box {
+            background: rgb(8, 28, 56); /* COLOR_PRIMARY */
+            width: 140px;
+            height: 80px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .logo-box:hover {
+            background: rgb(12, 38, 76);
+        }
+        
+        .channel-info {
+            background: rgb(66, 68, 136); /* COLOR_DARKGRAY */
+            flex: 1;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            padding: 10px;
+        }
+        
+        .channel-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .channel-artist {
+            font-size: 12px;
+            text-align: center;
+        }
+        
+        .middle-section {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .button {
+            background: rgb(132, 16, 32); /* COLOR_SECONDARY */
+            color: white;
+            height: 60px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            flex: 1;
+        }
+        
+        .button:hover {
+            background: rgb(152, 36, 52);
+        }
+        
+        .status-bar {
+            background: rgb(66, 68, 136);
+            height: 20px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 11px;
+        }
+        
+        .info {
+            margin-top: 20px;
+            text-align: center;
+            color: #666;
+        }
+        
+        .rds-indicator {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0, 200, 0, 0.8);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="device">
+        <div class="content">
+            <div class="top-section">
+                <div class="logo-box">SiriusXM</div>
+                <div class="channel-info">
+                    <div class="channel-name">Hits 1</div>
+                    <div class="channel-artist">Taylor Swift - Anti-Hero</div>
+                </div>
+            </div>
+            
+            <div class="middle-section">
+                <div class="button">Internet<br>Radio</div>
+                <div class="button">Settings</div>
+            </div>
+        </div>
+        
+        <div class="status-bar">Touch SiriusXM logo to change channels</div>
+        
+        <div class="rds-indicator">RDS</div>
+    </div>
+    
+    <div class="info">
+        <h3>Main Playback Screen</h3>
+        <p>Now playing with RDS metadata display</p>
+        <p><small>Touch logo: change channels | Internet Radio: stream web radio | Settings: configuration</small></p>
+        <p><strong>RDS Active:</strong> Song info broadcasts to car radio! 📻</p>
+    </div>
+</body>
+</html>

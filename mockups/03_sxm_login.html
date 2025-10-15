@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SiriusXM Login - ESP32 SiriusXM IntraRadio</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #f0f0f0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        
+        .device {
+            width: 320px;
+            height: 240px;
+            background: rgb(24, 56, 99);
+            position: relative;
+            border: 3px solid #333;
+            border-radius: 5px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: rgb(8, 28, 56);
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .content {
+            padding: 10px;
+        }
+        
+        .field-label {
+            color: white;
+            font-size: 12px;
+            margin-top: 10px;
+            margin-bottom: 3px;
+        }
+        
+        .input-field {
+            background: rgb(8, 28, 56); /* Active field - COLOR_PRIMARY */
+            padding: 10px;
+            border-radius: 5px;
+            color: white;
+            font-size: 18px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .input-field.inactive {
+            background: rgb(66, 68, 136); /* Inactive - COLOR_DARKGRAY */
+        }
+        
+        .keyboard {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.8);
+            padding: 5px;
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 2px;
+        }
+        
+        .key {
+            background: rgb(66, 68, 136);
+            color: white;
+            border: none;
+            padding: 5px;
+            font-size: 10px;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+        
+        .key:hover {
+            background: rgb(8, 28, 56);
+        }
+        
+        .login-btn {
+            background: rgb(0, 128, 0);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            position: absolute;
+            bottom: 110px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .info {
+            margin-top: 20px;
+            text-align: center;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="device">
+        <div class="header">SiriusXM Login</div>
+        <div class="content">
+            <div class="field-label">Email:</div>
+            <div class="input-field">user@example.com</div>
+            
+            <div class="field-label">Password:</div>
+            <div class="input-field inactive">********</div>
+        </div>
+        
+        <div class="login-btn">Login</div>
+        
+        <div class="keyboard">
+            <div class="key">q</div>
+            <div class="key">w</div>
+            <div class="key">e</div>
+            <div class="key">r</div>
+            <div class="key">t</div>
+            <div class="key">y</div>
+            <div class="key">u</div>
+            <div class="key">i</div>
+            <div class="key">o</div>
+            <div class="key">p</div>
+            <div class="key">a</div>
+            <div class="key">s</div>
+            <div class="key">d</div>
+            <div class="key">f</div>
+            <div class="key">g</div>
+            <div class="key">h</div>
+            <div class="key">j</div>
+            <div class="key">k</div>
+            <div class="key">l</div>
+            <div class="key">@</div>
+            <div class="key">z</div>
+            <div class="key">x</div>
+            <div class="key">c</div>
+            <div class="key">v</div>
+            <div class="key">b</div>
+            <div class="key">n</div>
+            <div class="key">m</div>
+            <div class="key">.</div>
+            <div class="key" style="grid-column: span 2;">DEL</div>
+        </div>
+    </div>
+    
+    <div class="info">
+        <h3>SiriusXM Login Screen</h3>
+        <p>Enter your SiriusXM account credentials</p>
+        <p><small>Touch field to activate, use on-screen keyboard</small></p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESP32 SiriusXM IntraRadio - UI Mockups</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 36px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 18px;
+        }
+        
+        .info-box {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 5px;
+        }
+        
+        .info-box h3 {
+            margin-top: 0;
+            color: #667eea;
+        }
+        
+        .info-box ul {
+            margin-bottom: 0;
+        }
+        
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .screen-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        
+        .screen-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .screen-card img {
+            width: 320px;
+            height: 240px;
+            border: 3px solid #333;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .screen-card h3 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .screen-card p {
+            color: #666;
+            font-size: 14px;
+            margin: 0;
+        }
+        
+        .screen-card a {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        
+        .screen-card a:hover {
+            background: #764ba2;
+        }
+        
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+        }
+        
+        .note {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .note strong {
+            color: #856404;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎵 ESP32 SiriusXM IntraRadio</h1>
+        <p class="subtitle">User Interface Mockups - 320x240 ILI9341 TFT Display</p>
+        
+        <div class="info-box">
+            <h3>📱 About These Mockups</h3>
+            <p><strong>These HTML mockups replicate the actual ESP32 display interface</strong> based on the code in <code>src/ui_manager.cpp</code>.</p>
+            <ul>
+                <li>✅ <strong>Exact dimensions:</strong> 320x240 pixels (native display resolution)</li>
+                <li>✅ <strong>Accurate colors:</strong> RGB565 color codes from <code>include/config.h</code></li>
+                <li>✅ <strong>Precise layouts:</strong> Positions and sizes match TFT drawing code</li>
+                <li>⚠️ <strong>Font differences:</strong> Web fonts approximate but don't exactly match TFT fonts</li>
+                <li>📸 <strong>Screenshot ready:</strong> Click any mockup to view full-screen, then screenshot</li>
+            </ul>
+        </div>
+        
+        <div class="note">
+            <strong>💡 How to Use:</strong> Click any screen below to open it full-size. Take a screenshot (Ctrl+Shift+S in most browsers) of just the 320x240 device area for use in documentation or GitHub.
+        </div>
+        
+        <div class="gallery">
+            <div class="screen-card">
+                <div style="width: 320px; height: 240px; background: rgb(24, 56, 99); border: 3px solid #333; border-radius: 5px; margin: 0 auto 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white;">
+                    <div style="font-size: 36px; font-weight: bold; margin-bottom: 20px;">SiriusXM</div>
+                    <div style="font-size: 24px; margin-bottom: 40px;">IntraRadio</div>
+                    <div style="font-size: 12px; position: absolute; bottom: 70px;">Initializing...</div>
+                </div>
+                <h3>01. Splash Screen</h3>
+                <p>Boot screen shown during initialization</p>
+                <a href="01_splash_screen.html" target="_blank">View Full Screen →</a>
+            </div>
+            
+            <div class="screen-card">
+                <div style="width: 320px; height: 240px; background: rgb(24, 56, 99); border: 3px solid #333; border-radius: 5px; margin: 0 auto 15px;">
+                    <div style="background: rgb(8, 28, 56); height: 30px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">WiFi Networks</div>
+                    <div style="padding: 10px;">
+                        <div style="background: rgb(8, 28, 56); margin: 5px 0; padding: 10px; border-radius: 5px; color: white; font-size: 16px;">MyHomeNetwork</div>
+                        <div style="background: rgb(66, 68, 136); margin: 5px 0; padding: 10px; border-radius: 5px; color: white; font-size: 16px;">ATT-WiFi-5G</div>
+                        <div style="background: rgb(66, 68, 136); margin: 5px 0; padding: 10px; border-radius: 5px; color: white; font-size: 16px;">Verizon_Hotspot</div>
+                        <div style="background: rgb(66, 68, 136); margin: 5px 0; padding: 10px; border-radius: 5px; color: white; font-size: 16px;">Linksys-Guest</div>
+                    </div>
+                </div>
+                <h3>02. WiFi Network Scan</h3>
+                <p>Select your WiFi network</p>
+                <a href="02_wifi_scan.html" target="_blank">View Full Screen →</a>
+            </div>
+            
+            <div class="screen-card">
+                <div style="width: 320px; height: 240px; background: rgb(24, 56, 99); border: 3px solid #333; border-radius: 5px; margin: 0 auto 15px; position: relative;">
+                    <div style="background: rgb(8, 28, 56); height: 30px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">SiriusXM Login</div>
+                    <div style="padding: 10px; color: white;">
+                        <div style="font-size: 11px; margin-top: 10px;">Email:</div>
+                        <div style="background: rgb(8, 28, 56); padding: 10px; border-radius: 5px; margin-top: 3px; font-size: 16px;">user@example.com</div>
+                        <div style="font-size: 11px; margin-top: 10px;">Password:</div>
+                        <div style="background: rgb(66, 68, 136); padding: 10px; border-radius: 5px; margin-top: 3px; font-size: 16px;">********</div>
+                    </div>
+                    <div style="position: absolute; bottom: 100px; left: 50%; transform: translateX(-50%); background: rgb(0, 128, 0); color: white; padding: 8px 20px; border-radius: 5px; font-weight: bold;">Login</div>
+                </div>
+                <h3>03. SiriusXM Login</h3>
+                <p>Enter your SXM credentials</p>
+                <a href="03_sxm_login.html" target="_blank">View Full Screen →</a>
+            </div>
+            
+            <div class="screen-card">
+                <div style="width: 320px; height: 240px; background: rgb(24, 56, 99); border: 3px solid #333; border-radius: 5px; margin: 0 auto 15px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <div style="background: rgb(8, 28, 56); height: 30px; width: 100%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; position: absolute; top: 0;">FM Frequency</div>
+                    <div style="color: white; font-size: 36px; font-weight: bold;">88.1 MHz</div>
+                    <div style="display: flex; gap: 80px; margin: 20px 0;">
+                        <div style="background: rgb(132, 16, 32); color: white; width: 60px; height: 40px; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold;">-</div>
+                        <div style="background: rgb(132, 16, 32); color: white; width: 60px; height: 40px; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold;">+</div>
+                    </div>
+                    <div style="background: rgb(0, 128, 0); color: white; padding: 10px 30px; border-radius: 5px; font-weight: bold;">Save</div>
+                </div>
+                <h3>04. FM Configuration</h3>
+                <p>Set your FM transmit frequency</p>
+                <a href="04_fm_config.html" target="_blank">View Full Screen →</a>
+            </div>
+            
+            <div class="screen-card">
+                <div style="width: 320px; height: 240px; background: rgb(24, 56, 99); border: 3px solid #333; border-radius: 5px; margin: 0 auto 15px; padding: 10px; position: relative;">
+                    <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                        <div style="background: rgb(8, 28, 56); width: 140px; height: 80px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">SiriusXM</div>
+                        <div style="background: rgb(66, 68, 136); flex: 1; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white;">
+                            <div style="font-weight: bold; margin-bottom: 5px;">Hits 1</div>
+                            <div style="font-size: 11px;">Taylor Swift - Anti-Hero</div>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <div style="background: rgb(132, 16, 32); flex: 1; height: 60px; border-radius: 5px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 14px;">Internet<br>Radio</div>
+                        <div style="background: rgb(132, 16, 32); flex: 1; height: 60px; border-radius: 5px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">Settings</div>
+                    </div>
+                    <div style="position: absolute; top: 15px; right: 15px; background: rgba(0, 200, 0, 0.9); color: white; padding: 3px 8px; border-radius: 3px; font-size: 10px; font-weight: bold;">RDS</div>
+                    <div style="background: rgb(66, 68, 136); height: 20px; position: absolute; bottom: 10px; left: 10px; right: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 10px;">Touch SiriusXM logo to change channels</div>
+                </div>
+                <h3>05. Main Playback Screen ⭐</h3>
+                <p>Now playing with RDS support</p>
+                <a href="05_main_screen.html" target="_blank">View Full Screen →</a>
+            </div>
+            
+            <div class="screen-card">
+                <div style="width: 320px; height: 240px; background: rgb(24, 56, 99); border: 3px solid #333; border-radius: 5px; margin: 0 auto 15px; position: relative;">
+                    <div style="background: rgb(8, 28, 56); height: 30px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">Select Channel</div>
+                    <div style="padding: 10px;">
+                        <div style="background: rgb(66, 68, 136); margin: 5px 0; padding: 12px 10px; border-radius: 5px; color: white; font-size: 16px;">Hits 1</div>
+                        <div style="background: rgb(8, 28, 56); margin: 5px 0; padding: 12px 10px; border-radius: 5px; color: white; font-size: 16px;">The Highway</div>
+                        <div style="background: rgb(66, 68, 136); margin: 5px 0; padding: 12px 10px; border-radius: 5px; color: white; font-size: 16px;">80s on 8</div>
+                        <div style="background: rgb(66, 68, 136); margin: 5px 0; padding: 12px 10px; border-radius: 5px; color: white; font-size: 16px;">Classic Rock Florida</div>
+                    </div>
+                    <div style="position: absolute; bottom: 10px; left: 10px; background: rgb(132, 16, 32); color: white; padding: 10px 20px; border-radius: 5px; font-weight: bold;">Back</div>
+                </div>
+                <h3>06. Channel Selection</h3>
+                <p>Browse 200+ channels</p>
+                <a href="06_channel_list.html" target="_blank">View Full Screen →</a>
+            </div>
+            
+            <div class="screen-card">
+                <div style="width: 320px; height: 240px; background: rgb(24, 56, 99); border: 3px solid #333; border-radius: 5px; margin: 0 auto 15px; position: relative;">
+                    <div style="background: rgb(8, 28, 56); height: 30px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">Settings</div>
+                    <div style="padding: 10px;">
+                        <div style="background: rgb(66, 68, 136); margin: 5px 0; padding: 12px 10px; border-radius: 5px; color: white; font-size: 16px; display: flex; justify-content: space-between;"><span>WiFi Settings</span><span style="opacity: 0.6;">›</span></div>
+                        <div style="background: rgb(66, 68, 136); margin: 5px 0; padding: 12px 10px; border-radius: 5px; color: white; font-size: 16px; display: flex; justify-content: space-between;"><span>SXM Credentials</span><span style="opacity: 0.6;">›</span></div>
+                        <div style="background: rgb(66, 68, 136); margin: 5px 0; padding: 12px 10px; border-radius: 5px; color: white; font-size: 16px; display: flex; justify-content: space-between;"><span>FM Frequency</span><span style="opacity: 0.6;">›</span></div>
+                        <div style="background: rgb(66, 68, 136); margin: 5px 0; padding: 12px 10px; border-radius: 5px; color: white; font-size: 16px; display: flex; justify-content: space-between;"><span>About</span><span style="opacity: 0.6;">›</span></div>
+                    </div>
+                    <div style="position: absolute; bottom: 10px; left: 10px; background: rgb(132, 16, 32); color: white; padding: 10px 20px; border-radius: 5px; font-weight: bold;">Back</div>
+                </div>
+                <h3>07. Settings Menu</h3>
+                <p>Device configuration</p>
+                <a href="07_settings.html" target="_blank">View Full Screen →</a>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p><strong>ESP32 SiriusXM IntraRadio</strong> - UI Mockup Gallery</p>
+            <p>Based on code from <code>src/ui_manager.cpp</code> and <code>include/config.h</code></p>
+            <p><a href="https://github.com/neilyboy/esp32-sxm-inetradio" style="color: #667eea; text-decoration: none;">View Project on GitHub →</a></p>
+        </div>
+    </div>
+</body>
+</html>

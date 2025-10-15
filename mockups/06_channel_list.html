@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Channel List - ESP32 SiriusXM IntraRadio</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #f0f0f0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        
+        .device {
+            width: 320px;
+            height: 240px;
+            background: rgb(24, 56, 99);
+            position: relative;
+            border: 3px solid #333;
+            border-radius: 5px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: rgb(8, 28, 56);
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .content {
+            padding: 10px;
+        }
+        
+        .channel-item {
+            background: rgb(66, 68, 136);
+            margin: 5px 0;
+            padding: 12px 10px;
+            border-radius: 5px;
+            color: white;
+            font-size: 18px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .channel-item.selected {
+            background: rgb(8, 28, 56);
+        }
+        
+        .channel-item:hover {
+            background: rgb(12, 38, 76);
+        }
+        
+        .scrollbar {
+            position: absolute;
+            right: 8px;
+            top: 40px;
+            width: 4px;
+            height: 160px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 2px;
+        }
+        
+        .scrollbar-thumb {
+            width: 100%;
+            height: 30px;
+            background: rgba(255,255,255,0.6);
+            border-radius: 2px;
+            position: relative;
+            top: 20px;
+        }
+        
+        .back-button {
+            background: rgb(132, 16, 32);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .back-button:hover {
+            background: rgb(152, 36, 52);
+        }
+        
+        .info {
+            margin-top: 20px;
+            text-align: center;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="device">
+        <div class="header">Select Channel</div>
+        <div class="content">
+            <div class="channel-item">Hits 1</div>
+            <div class="channel-item selected">The Highway</div>
+            <div class="channel-item">80s on 8</div>
+            <div class="channel-item">Classic Rock Florida</div>
+        </div>
+        
+        <div class="scrollbar">
+            <div class="scrollbar-thumb"></div>
+        </div>
+        
+        <div class="back-button">Back</div>
+    </div>
+    
+    <div class="info">
+        <h3>Channel Selection List</h3>
+        <p>Browse and select SiriusXM or Internet Radio channels</p>
+        <p><small>Scrollable list of 200+ SiriusXM channels + 32 internet stations</small></p>
+    </div>
+</body>
+</html>

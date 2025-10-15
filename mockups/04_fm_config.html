@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FM Config - ESP32 SiriusXM IntraRadio</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #f0f0f0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        
+        .device {
+            width: 320px;
+            height: 240px;
+            background: rgb(24, 56, 99);
+            position: relative;
+            border: 3px solid #333;
+            border-radius: 5px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: rgb(8, 28, 56);
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: calc(100% - 30px);
+            color: white;
+        }
+        
+        .frequency-display {
+            font-size: 36px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        
+        .button-container {
+            display: flex;
+            gap: 80px;
+            margin-bottom: 20px;
+        }
+        
+        .button {
+            background: rgb(132, 16, 32); /* COLOR_SECONDARY */
+            color: white;
+            width: 60px;
+            height: 40px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+        
+        .button:hover {
+            background: rgb(152, 36, 52);
+        }
+        
+        .save-button {
+            background: rgb(0, 128, 0);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+        }
+        
+        .save-button:hover {
+            background: rgb(0, 150, 0);
+        }
+        
+        .info {
+            margin-top: 20px;
+            text-align: center;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="device">
+        <div class="header">FM Frequency</div>
+        <div class="content">
+            <div class="frequency-display">88.1 MHz</div>
+            
+            <div class="button-container">
+                <div class="button">-</div>
+                <div class="button">+</div>
+            </div>
+            
+            <div class="save-button">Save</div>
+        </div>
+    </div>
+    
+    <div class="info">
+        <h3>FM Frequency Configuration</h3>
+        <p>Select a clear FM frequency for broadcasting</p>
+        <p><small>Range: 87.5 - 108.0 MHz (0.1 MHz steps)</small></p>
+    </div>
+</body>
+</html>

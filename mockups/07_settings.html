@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - ESP32 SiriusXM IntraRadio</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #f0f0f0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        
+        .device {
+            width: 320px;
+            height: 240px;
+            background: rgb(24, 56, 99);
+            position: relative;
+            border: 3px solid #333;
+            border-radius: 5px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: rgb(8, 28, 56);
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .content {
+            padding: 10px;
+        }
+        
+        .menu-item {
+            background: rgb(66, 68, 136);
+            margin: 5px 0;
+            padding: 12px 10px;
+            border-radius: 5px;
+            color: white;
+            font-size: 18px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            justify-content: space-between;
+        }
+        
+        .menu-item:hover {
+            background: rgb(86, 88, 156);
+        }
+        
+        .menu-item::after {
+            content: '›';
+            font-size: 24px;
+            opacity: 0.6;
+        }
+        
+        .back-button {
+            background: rgb(132, 16, 32);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .back-button:hover {
+            background: rgb(152, 36, 52);
+        }
+        
+        .info {
+            margin-top: 20px;
+            text-align: center;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="device">
+        <div class="header">Settings</div>
+        <div class="content">
+            <div class="menu-item">WiFi Settings</div>
+            <div class="menu-item">SXM Credentials</div>
+            <div class="menu-item">FM Frequency</div>
+            <div class="menu-item">About</div>
+        </div>
+        
+        <div class="back-button">Back</div>
+    </div>
+    
+    <div class="info">
+        <h3>Settings Menu</h3>
+        <p>Configure device settings</p>
+        <p><small>All settings stored in non-volatile memory (NVS)</small></p>
+    </div>
+</body>
+</html>

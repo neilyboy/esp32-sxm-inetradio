@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Splash Screen - ESP32 SiriusXM IntraRadio</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #f0f0f0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        
+        .device {
+            width: 320px;
+            height: 240px;
+            background: #18E3; /* COLOR_BG from config.h */
+            background: rgb(24, 56, 99); /* Converted from RGB565 */
+            position: relative;
+            border: 3px solid #333;
+            border-radius: 5px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .screen {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        
+        .logo-main {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .logo-sub {
+            font-size: 24px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        
+        .status {
+            font-size: 12px;
+            position: absolute;
+            bottom: 30px;
+            text-align: center;
+            width: 100%;
+        }
+        
+        .info {
+            margin-top: 20px;
+            text-align: center;
+            color: #666;
+        }
+        
+        .info h3 {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="device">
+        <div class="screen">
+            <div class="logo-main">SiriusXM</div>
+            <div class="logo-sub">IntraRadio</div>
+            <div class="status">Initializing...</div>
+        </div>
+    </div>
+    
+    <div class="info">
+        <h3>Splash Screen</h3>
+        <p>Shown on boot while initializing hardware</p>
+        <p><small>320x240 ILI9341 TFT Display</small></p>
+    </div>
+</body>
+</html>
