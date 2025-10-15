@@ -10,9 +10,9 @@ A standalone ESP32-based internet radio that streams SiriusXM and internet radio
   - Recommend 4MB+ flash
 - **2.8" ILI9341 TFT Touchscreen Display** (320x240, SPI)
   - [ELEGOO 2.8" TFT Display](https://www.amazon.com/ELEGOO-Display-Acrylic-Protector-Projects/dp/B0FJQJZYXG)
-- **FM Transmitter Module** (choose one):
-  - **QN8066** (recommended - better quality, stereo, I2C)
-  - **KT0803L** (budget option, I2C)
+- **FM Transmitter Module**:
+  - **QN8066** (**REQUIRED for RDS support** - stereo, RDS, I2C)
+  - ~~KT0803L~~ (no RDS support, not recommended)
 - **I2S DAC Module** (PCM5102 or similar) - for audio output
 - **USB-C Power Module** (5V to 3.3V/5V for ESP32)
 
@@ -24,8 +24,13 @@ A standalone ESP32-based internet radio that streams SiriusXM and internet radio
 
 - ✅ WiFi configuration via touchscreen
 - ✅ SiriusXM channel streaming (requires SiriusXM subscription)
-- ✅ Internet radio station support
+- ✅ Internet radio station support (32 pre-loaded stations)
 - ✅ FM transmission on user-selectable frequency (87.5-108 MHz)
+- ✅ **RDS (Radio Data System) support** - displays song info on car radio! 📻
+  - Shows station name (8 chars)
+  - Shows artist and song title (64 chars scrolling text)
+  - Automatic metadata extraction from streams
+  - Uses pu2clr/QN8066 library
 - ✅ Touch-based channel selection
 - ✅ Settings management (WiFi, credentials, FM frequency)
 - ✅ Persistent storage of settings
@@ -258,7 +263,21 @@ esp32-sxm-intradio/
 ```
 
 ### Adding Internet Radio Stations
-Edit `src/data/radio_stations.h` to add more stations.
+Edit `include/radio_stations.h` to add more stations.
+
+## Documentation
+
+- **[README.md](README.md)** - This file, project overview
+- **[QUICKSTART.md](QUICKSTART.md)** - 30-minute quick start guide
+- **[DEPLOYMENT.md](DEPLOYMENT.md)** - Complete deployment instructions
+- **[HARDWARE_GUIDE.md](HARDWARE_GUIDE.md)** - Detailed wiring and assembly
+- **[TFT_SETUP_GUIDE.md](TFT_SETUP_GUIDE.md)** - Critical display configuration
+- **[PARTS_LIST.md](PARTS_LIST.md)** - Shopping list with links
+- **[M3U8XM_SERVER_SETUP.md](M3U8XM_SERVER_SETUP.md)** - Raspberry Pi server setup
+- **[RDS_SUPPORT.md](RDS_SUPPORT.md)** - RDS configuration and troubleshooting ⭐ NEW!
+- **[SIRIUSXM_API.md](SIRIUSXM_API.md)** - API integration guide
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** - System design documentation
+- **[PROJECT_STATUS.md](PROJECT_STATUS.md)** - Current status and roadmap
 
 ## License
 
@@ -266,7 +285,10 @@ MIT License - See LICENSE file for details
 
 ## Credits
 
-- SiriusXM API integration based on [m3u8XM](https://github.com/myselfondiscord/m3u8XM)
+- **SiriusXM API integration** based on [m3u8XM](https://github.com/myselfondiscord/m3u8XM)
+- **RDS support** powered by [pu2clr/QN8066](https://github.com/pu2clr/QN8066) library
+- **Audio streaming** via [ESP32-audioI2S](https://github.com/schreibfaul1/ESP32-audioI2S)
+- **Display library** [TFT_eSPI](https://github.com/Bodmer/TFT_eSPI)
 - Built for the maker community
 
 ## Disclaimer
